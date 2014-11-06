@@ -9,7 +9,7 @@ It's at `v0.0.2` Because it's still catching up to the Node.js one.
 1. Install the [haskell-platform](https://www.haskell.org/platform).
 2. `cabal install missingh`
 3. `cabal install aeson`
-4. Import `EsbClient` into your microservice and go!
+4. Import `HelpEsbClient` into your microservice and go!
 
 ## examples/basic.hs
 Included is a [basic implementation](examples/basic.hs) that simply logs into the ESB, verifies the login,
