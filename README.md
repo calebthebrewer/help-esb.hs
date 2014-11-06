@@ -11,7 +11,7 @@ It's at `v0.0.2` Because it's still catching up to the Node.js one.
 3. `cabal install aeson`
 4. Import `EsbClient` into your microservice and go!
 
-## test.hs
+## examples/basic.hs
 Included is a [basic implementation](examples/basic.hs) that simply logs into the ESB, verifies the login,
 then listens and logs out raw input from its subscriptions.
 
