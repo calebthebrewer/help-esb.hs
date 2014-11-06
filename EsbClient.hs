@@ -9,6 +9,7 @@ module EsbClient
 , sendSocketData
 , readSocketDataRaw
 , readSocketData
+, esbGetMeta
 , esbLoginRequest
 , esbLoginResponse
 , logger
@@ -28,6 +29,7 @@ import Data.Aeson
 import qualified Data.ByteString.Lazy.Char8 as C
 
 -- JSON Modules
+import qualified JSON.Basic.Response as Basic.Response
 import qualified JSON.Login.Request as Login.Request
 import qualified JSON.Login.Response as Login.Response
 
@@ -68,6 +70,20 @@ readSocketData sock = do
   return $ C.pack fixed
 
 -- ESB Specific Functions
+esbGetMeta :: Socket -> IO (Basic.Response.Meta, C.ByteString)
+esbGetMeta sock = do
+  bytes <- readSocketData sock
+  let response = eitherDecode bytes
+  case response of
+    Left error -> do
+      logger ("! Error: " ++ error)
+      let meta = Basic.Response.Meta { Basic.Response.h_type = "error", Basic.Response.h_id = "000" }
+      return (meta, bytes)
+    Right message -> do
+      let meta = Basic.Response.h_meta message
+      logger ("Message: " ++ show meta)
+      return (meta, bytes)
+
 esbLoginRequest :: Socket -> Login.Request.Data -> IO ()
 esbLoginRequest sock payload = do
   uuid <- nextRandom
