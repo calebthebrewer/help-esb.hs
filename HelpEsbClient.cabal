@@ -2,7 +2,7 @@
 -- documentation, see http://haskell.org/cabal/users-guide/
 
 name:                HelpEsbClient
-version:             0.1.1
+version:             0.0.2
 synopsis:            A Haskell client for the Help.com team's ESB.
 -- description:         
 homepage:            https://github.com/helpdotcom/help-esb.hs
