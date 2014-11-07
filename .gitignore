@@ -3,3 +3,5 @@
 *.swp
 Setup.hs
 dist
+HelpEsbClient
+examples/Basic

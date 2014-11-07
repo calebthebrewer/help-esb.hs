@@ -9,12 +9,12 @@ A Haskell client for our ESB.
 3. `cabal install aeson`
 4. Import `HelpEsbClient` into your microservice and go!
 
-## examples/basic.hs
-Included is a [basic implementation](examples/basic.hs) that simply logs into the ESB, verifies the login,
+## examples/Basic.hs
+Included is a [basic implementation](examples/Basic.hs) that simply logs into the ESB, verifies the login,
 then listens and logs out raw input from its subscriptions.
 
 To run it for yourself do:
 
 1. `cd examples`
-2. `ghc -i../ basic.hs`
-3. `./basic`
+2. `ghc -i../ Basic.hs`
+3. `./Basic`
