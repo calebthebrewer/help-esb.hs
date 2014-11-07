@@ -23,10 +23,14 @@ module HelpEsbClient
 , eitherDecode
 , logger
 , Socket
+, module Data.UUID
+, module Data.UUID.V4
+, module System.Environment
 ) where
 
 -- Base Modules
 import System.IO
+import System.Environment
 import Network.Socket
 import Control.Exception
 import GHC.Generics
@@ -42,14 +46,13 @@ import qualified JSON.Basic.Response as Basic.Response
 import qualified JSON.Login.Request as Login.Request
 import qualified JSON.Login.Response as Login.Response
 
-type MessageType = Basic.Response.Message
-
 -- Classes
 class EsbSend a where
   esbSend :: Socket -> a -> IO ()
 
 class EsbRecieve a where
   esbRecieve :: Socket -> a -> IO ()
+
 -- Logging
 logger :: String -> IO ()
 logger out = do
@@ -97,7 +100,7 @@ instance EsbRecieve Login.Response.Message where
       "SUCCESS" -> logger ("Successfully logged in.")
       _ -> error "! Failed to login!"
 
--- ESB Specific Functions
+-- Initialization Instances
 esbInit :: Text -> [Text] -> String -> Int -> IO Socket
 esbInit name subscriptions host port = do
   sock <- getSocket host port
@@ -105,6 +108,7 @@ esbInit name subscriptions host port = do
   esbSend sock loginData
   return sock
 
+-- Essential Listening Logic
 esbListen :: Socket -> IO (C.ByteString)
 esbListen sock = do
   bytes <- readSocketData sock

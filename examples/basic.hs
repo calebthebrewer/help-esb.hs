@@ -20,7 +20,7 @@ listen sock = do
 main :: IO ()
 main = do
   -- Connect to socket and login
-  sock <- esbInit "haskell-test" [ "jkl" ] host port
+  sock <- esbInit "haskell-test" [ ] host port
 
   -- Start Listening
   listen sock
