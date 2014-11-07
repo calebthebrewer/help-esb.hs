@@ -3,8 +3,6 @@ help-esb.hs
 
 A Haskell client for our ESB.
 
-It's at `v0.0.2` Because it's still catching up to the Node.js one.
-
 ## Installation
 1. Install the [haskell-platform](https://www.haskell.org/platform).
 2. `cabal install missingh`

@@ -18,11 +18,11 @@ data Meta = Meta
   , h_id :: [Char]
   , h_source :: Text
   , h_replyTo :: Text
+  , h_result :: Text
   } deriving (Show, Generic)
 
 data Data = Data
-  { h_result :: Text
-  , h_heartbeatInterval :: Int
+  { h_heartbeatInterval :: Int
   , h_channelId :: Text
   } deriving (Show, Generic)
 

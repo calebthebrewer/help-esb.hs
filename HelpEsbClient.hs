@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings, DeriveGeneric #-}
 
 -- Haskell version of the Help.com ESB Client
--- v0.0.2
+-- v0.1.0
 
 module HelpEsbClient
 -- Classes
@@ -18,6 +18,9 @@ module HelpEsbClient
 , esbInit
 , esbListen
 -- Utility
+, encode
+, decode
+, eitherDecode
 , logger
 , Socket
 ) where
@@ -89,7 +92,7 @@ instance EsbSend Login.Request.Data where
 -- Recieve Socket Instances
 instance EsbRecieve Login.Response.Message where
   esbRecieve sock message = do
-    let payload = Login.Response.h_data message
+    let payload = Login.Response.h_meta message
     case Login.Response.h_result payload of
       "SUCCESS" -> logger ("Successfully logged in.")
       _ -> error "! Failed to login!"
