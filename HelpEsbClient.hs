@@ -1,7 +1,7 @@
 {-# LANGUAGE OverloadedStrings, DeriveGeneric #-}
 
 -- Haskell version of the Help.com ESB Client
--- v0.1.0
+-- v0.1.1
 
 module HelpEsbClient
 -- Classes
@@ -45,6 +45,8 @@ import qualified Data.ByteString.Lazy.Char8 as C
 import qualified JSON.Basic.Response as Basic.Response
 import qualified JSON.Login.Request as Login.Request
 import qualified JSON.Login.Response as Login.Response
+import qualified JSON.API.EventGroup.Post.Request as EventGroup.Post.Request
+import qualified JSON.API.Event.Post.Request as Event.Post.Request
 
 -- Classes
 class EsbSend a where
@@ -88,9 +90,46 @@ readSocketData sock = do
 instance EsbSend Login.Request.Data where
   esbSend sock payload = do
     uuid <- nextRandom
-    let meta = Login.Request.Meta { Login.Request.h_type = "login", Login.Request.h_id = toString uuid }
-    let message = Login.Request.Message { Login.Request.h_meta = meta, Login.Request.h_data = payload }
+    let meta = Login.Request.Meta {
+        Login.Request.h_type = "login"
+      , Login.Request.h_id = toString uuid
+      }
+    let message = Login.Request.Message {
+        Login.Request.h_meta = meta
+      , Login.Request.h_data = payload
+      }
     sendSocketData sock (encode message)
+    logger ("Login Request: " ++ show message)
+
+instance EsbSend EventGroup.Post.Request.Data where
+  esbSend sock payload = do
+    uuid <- nextRandom
+    let meta = EventGroup.Post.Request.Meta {
+        EventGroup.Post.Request.h_type = "sendMessage"
+      , EventGroup.Post.Request.h_id = toString uuid
+      , EventGroup.Post.Request.h_group = "api-messages"
+      }
+    let message = EventGroup.Post.Request.Message {
+        EventGroup.Post.Request.h_meta = meta
+      , EventGroup.Post.Request.h_data = payload
+      }
+    sendSocketData sock (encode message)
+    logger ("EventGroup API Request: " ++ show message)
+
+instance EsbSend Event.Post.Request.Data where
+  esbSend sock payload = do
+    uuid <- nextRandom
+    let meta = Event.Post.Request.Meta {
+        Event.Post.Request.h_type = "sendMessage"
+      , Event.Post.Request.h_id = toString uuid
+      , Event.Post.Request.h_group = "api-messages"
+      }
+    let message = Event.Post.Request.Message {
+        Event.Post.Request.h_meta = meta
+      , Event.Post.Request.h_data = payload
+      }
+    sendSocketData sock (encode message)
+    logger ("Event API Request: " ++ show message)
 
 -- Recieve Socket Instances
 instance EsbRecieve Login.Response.Message where
