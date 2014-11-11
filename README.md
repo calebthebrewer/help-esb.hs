@@ -7,7 +7,7 @@ A Haskell client for our ESB.
 To install `HelpEsbClient` as a GHC Library, do:
 
 ```
-cabal install HelpEsbClient
+cabal install help-esb
 ```
 
 If you want to build it from scratch:

@@ -4,7 +4,7 @@
 name:                HelpEsbClient
 version:             0.1.1
 synopsis:            A Haskell client for the Help.com team's ESB.
--- description:         
+description:         A Haskell client for the Help.com team's ESB.
 homepage:            https://github.com/helpdotcom/help-esb.hs
 license:             MIT
 license-file:        LICENSE
@@ -14,6 +14,10 @@ maintainer:          alex.martin@help.com
 category:            Development
 build-type:          Simple
 cabal-version:       >=1.8
+
+source-repository head
+  type: git
+  location: git://github.com/helpdotcom/help-esb.hs
 
 library
   exposed-modules:     HelpEsbClient, JSON.Login.Request, JSON.Login.Response, JSON.Basic.Request, JSON.Basic.Response
