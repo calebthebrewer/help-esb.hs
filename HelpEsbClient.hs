@@ -58,7 +58,7 @@ import qualified JSON.API.Event.Post.Request as Event.Post.Request
 -- Classes
 -- | The 'EsbSend' class determines how a message should be sent to the ESB.
 class EsbSend a where
-  -- | The 'esbSend' method takes a socket and writes somekind of payload.
+  -- | The 'esbSend' method takes a socket and writes some kind of payload.
   esbSend :: Socket -- ^ The socket connection.
     -> a -- ^ The payload.
     -> IO () -- ^ Any IO output.
@@ -66,7 +66,7 @@ class EsbSend a where
 -- | The 'EsbRecieve' class determines how a message from the ESB should be
 -- recieved.
 class EsbRecieve a where
-  -- | The 'esbRecieve' method takes a socket and reads somekind of payload.
+  -- | The 'esbRecieve' method takes a socket and reads some kind of payload.
   esbRecieve :: Socket -- ^ The socket connection.
     -> a -- ^ The payload.
     -> IO () -- ^ Any IO output.
