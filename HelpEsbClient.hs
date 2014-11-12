@@ -39,9 +39,12 @@ module HelpEsbClient (
 import System.IO
 import System.Environment
 import Network.Socket
+import Network.URI
 import Control.Exception
 import GHC.Generics
-import Data.Text hiding (replace)
+import Data.Maybe
+import Data.Map
+import Data.Text hiding (replace, tail, drop, reverse)
 import Data.List.Utils
 import Data.UUID
 import Data.UUID.V4
@@ -180,10 +183,29 @@ instance EsbRecieve Login.Response.Message where
 -- into the ESB.
 esbInit :: Text -- ^ Group name.
   -> [Text] -- ^ Subscriptions.
-  -> String -- ^ Host address.
-  -> Int -- ^ Host port.
+  -> Maybe String -- ^ Host address or Nothing. Defaults to 127.0.0.1.
+  -> Maybe Int -- ^ Host port or Nothing. Defaults to 8900.
   -> IO Socket -- ^ The socket connection.
-esbInit name subscriptions host port = do
+esbInit name subscriptions maybeHost maybePort = do
+  let argHost = fromMaybe "Nothing" maybeHost
+  let argPort = fromMaybe 0 maybePort
+
+  envVars <- getEnvironment
+  let envMap = Data.Map.fromList envVars
+  let envUriString = fromMaybe "tcp://127.0.0.1:8900" (Data.Map.lookup "ESB" envMap)
+
+  let envUri = fromMaybe nullURI (parseURI envUriString)
+
+  let defaultUriAuth = URIAuth {
+      uriUserInfo = ""
+    , uriRegName = "127.0.0.1"
+    , uriPort = ":8900"
+    }
+  let envUriAuth = fromMaybe defaultUriAuth (uriAuthority envUri)
+
+  let host = if argHost /= "Nothing" then argHost else uriRegName envUriAuth
+  let port = if argPort /= 0 then argPort else read (tail (uriPort envUriAuth))
+
   sock <- getSocket host port
   let loginData = Login.Request.Data { Login.Request.h_name = name, Login.Request.h_subscriptions = subscriptions }
   esbSend sock loginData
