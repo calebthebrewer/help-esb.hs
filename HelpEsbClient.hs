@@ -23,6 +23,8 @@ module HelpEsbClient (
 -- * ESB Functions
 , esbSend
 , esbRecieve
+, esbSendExternal
+, esbRecieveExternal
 , esbInit
 , esbListen
 -- * Utility Functions
@@ -30,11 +32,13 @@ module HelpEsbClient (
 , decode
 , eitherDecode
 , logger
+, forM_
 -- * Utility Types
 , Socket
 , module Data.UUID
 , module Data.UUID.V4
 , module System.Environment
+, module Control.Monad
 ) where
 
 -- Base Modules
@@ -43,6 +47,7 @@ import System.Environment
 import Network.Socket
 import Network.URI
 import Control.Exception
+import Control.Monad
 import GHC.Generics
 import Data.Maybe
 import Data.Map
@@ -128,7 +133,7 @@ sendSocketData sock bytes = do
 readSocketDataRaw :: Socket -- ^ The socket connection.
   -> IO [Char] -- ^ Any IO output.
 readSocketDataRaw sock = do
-  message <- recv sock 1024
+  message <- recv sock 4096
   logger ("+ Raw Read: " ++ message)
   return message
 
@@ -235,14 +240,17 @@ esbInit name subscriptions maybeHost maybePort = do
 -- | The 'esbListen' function performs all essential listening logic
 -- for any ESB client.
 esbListen :: Socket -- ^ The socket connection.
-  -> IO (C.ByteString) -- ^ The JSON bytestring payload.
+  -> IO ([C.ByteString]) -- ^ The array of JSON bytestring payload.
 esbListen sock = do
   bytes <- readSocketData sock
 
-  case eitherDecode bytes :: (Either String Login.Response.Message) of
-    Left error -> return ()
-    Right response -> do
-      logger ("Response: " ++ show response)
-      esbRecieve sock response
+  let messages = C.split '\n' bytes
 
-  return bytes
+  forM_ messages $ \message -> do
+    case eitherDecode bytes :: (Either String Login.Response.Message) of
+      Left error -> return ()
+      Right response -> do
+        logger ("Response: " ++ show response)
+        esbRecieve sock response
+
+  return messages
