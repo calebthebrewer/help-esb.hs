@@ -13,6 +13,8 @@ module HelpEsbClient (
 -- * Classes
   EsbSend
 , EsbRecieve
+, EsbSendExternal
+, EsbRecieveExternal
 -- * Raw Exported Functions
 , getSocket
 , sendSocketData
