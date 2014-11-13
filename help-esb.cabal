@@ -2,7 +2,7 @@
 -- documentation, see http://haskell.org/cabal/users-guide/
 
 name:                help-esb
-version:             0.1.2
+version:             0.1.4
 synopsis:            A Haskell client for the Help.com team's ESB.
 description:         A Haskell client for the Help.com team's ESB.
 homepage:            https://github.com/helpdotcom/help-esb.hs
@@ -22,4 +22,4 @@ source-repository head
 library
   exposed-modules:     HelpEsbClient, JSON.API.EventGroup.Post.Request, JSON.API.Event.Post.Request, JSON.Login.Request, JSON.Login.Response, JSON.Basic.Request, JSON.Basic.Response
   -- other-modules:       
-  build-depends:       base ==4.*, network ==2.*, text ==1.*, MissingH ==1.*, uuid ==1.*, aeson ==0.*, bytestring ==0.*
+  build-depends:       base ==4.*, network ==2.*, network-uri ==2.*, containers ==0.*, text ==1.*, MissingH ==1.*, uuid ==1.*, aeson ==0.*, bytestring ==0.*

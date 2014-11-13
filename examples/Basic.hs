@@ -5,8 +5,10 @@ module Main where
 import HelpEsbClient
 
 -- ESB Environment
-host = "127.0.0.1"
-port = 8900
+-- Will first try to use the ESB environment variable.
+-- If that fails, it will default to 127.0.0.1:8900.
+host = Nothing
+port = Nothing
 
 -- Listening Recursion
 listen :: Socket -> IO ()
