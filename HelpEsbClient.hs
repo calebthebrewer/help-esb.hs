@@ -1,4 +1,4 @@
-{-# LANGUAGE OverloadedStrings, DeriveGeneric #-}
+{-# LANGUAGE OverloadedStrings, DeriveGeneric, MultiParamTypeClasses #-}
 
 {-|
 Module : HelpEsbClient
@@ -66,12 +66,30 @@ class EsbSend a where
     -> a -- ^ The payload.
     -> IO () -- ^ Any IO output.
 
+-- | The 'EsbSendExternal' is similar to 'EsbSend', just with an option to
+-- involve external resources.
+class EsbSendExternal a b where
+  -- | The 'esbSendExternal' method takes a socket and writes some kind of payload.
+  esbSendExternal :: Socket -- ^ The socket connection.
+    -> a -- ^ The payload.
+    -> b -- ^ Another resource to be used, i.e. DB connection, API, etc.
+    -> IO () -- ^ Any IO output.
+
 -- | The 'EsbRecieve' class determines how a message from the ESB should be
 -- recieved.
 class EsbRecieve a where
   -- | The 'esbRecieve' method takes a socket and reads some kind of payload.
   esbRecieve :: Socket -- ^ The socket connection.
     -> a -- ^ The payload.
+    -> IO () -- ^ Any IO output.
+
+-- | The 'EsbRecieveExternal' is similar to 'EsbRecieve', just with an option to
+-- involve external resources.
+class EsbRecieveExternal a b where
+  -- | The 'esbRecieveExternal' method takes a socket and reads some kind of payload.
+  esbRecieveExternal :: Socket -- ^ The socket connection.
+    -> a -- ^ The payload.
+    -> b -- ^ Another resource to be used, i.e. DB connection, API, etc.
     -> IO () -- ^ Any IO output.
 
 -- | The 'logger' function simply logs out in a consistent way. Will be
